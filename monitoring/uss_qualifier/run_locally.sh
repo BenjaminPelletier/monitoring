@@ -12,17 +12,9 @@ else
 fi
 cd "${BASEDIR}/../.." || exit 1
 
-echo '#########################################################################'
-echo '## NOTE: A prerequisite for running this command locally is to have    ##'
-echo '## running instances of mock_uss acting as RID SP, RID DP, and SCD     ##'
-echo '## (../mock_uss/run_locally_ridsp.sh) and                              ##'
-echo '## (../mock_uss/run_locally_riddp.sh) and                              ##'
-echo '## (../mock_uss/run_locally_scdsc.sh) including related dependencies.  ##'
-echo '#########################################################################'
-
 monitoring/build.sh || exit 1
 
-CONFIG_NAME="${1:-configurations.dev.local_test}"
+CONFIG_NAME="${1:-configurations.dev.all_local_tests}"
 CONFIG_FLAG="--config ${CONFIG_NAME}"
 
 AUTH_SPEC='DummyOAuth(http://host.docker.internal:8085/token,uss_qualifier)'

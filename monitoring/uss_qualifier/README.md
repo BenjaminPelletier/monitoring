@@ -8,7 +8,7 @@ The uss_qualifier tool in this folder automates verifying compliance to requirem
 
 The `uss_qualifier` tool is a synchronous executable built into the `interuss/monitoring` Docker image.  To use the `interuss/monitoring` image to run uss_qualifier, specify a working directory of `/app/monitoring/uss_qualifier` and a command of `python main.py ${OPTIONS}` -- see [`run_locally.sh`](run_locally.sh) for an example that can be run on any local system that is running the required prerequisites (documented in message printed by run_locally.sh).
 
-The primary input accepted by uss_qualifier is the "configuration" specified with the `--config` option.  This option should be a [reference to a configuration file](configurations/README.md) that the user has constructed or been provided to test the desired system for the desired characteristics.  If testing a standard local system (DSS + dummy auth + mock USSs), the user can specify an alternate configuration reference as a single argument to `run_locally.sh` (the default configuration is `configurations.dev.local_test`).
+The primary input accepted by uss_qualifier is the "configuration" specified with the `--config` option.  This option should be a [reference to a configuration file](configurations/README.md) that the user has constructed or been provided to test the desired system for the desired characteristics.  If testing a standard local system (DSS + dummy auth + mock USSs), the user can specify an alternate configuration reference as a single argument to `run_locally.sh` (the default configuration is `configurations.dev.all_local_tests`).
 
 When building a custom configuration file, consider starting from [`configurations.dev.self_contained_f3548`](configurations/dev/self_contained_f3548.yaml), as it contains all information necessary to run the test without the usage of sometimes-configuring `$ref`s and `allOf`s.  See [configurations documentation](configurations/README.md) for more information.
 
@@ -20,7 +20,7 @@ This section provides a specific set of commands to execute uss_qualifier for de
 2. Go to repository root: `cd monitoring`
 3. Bring up a local UTM ecosystem (DSS + dummy auth): `make start-locally`
 4. Bring up mock USSs: `make start-uss-mocks`
-5. Run uss_qualifier explicitly specifying a configuration to use: `monitoring/uss_qualifier/run_locally.sh configurations.dev.local_test`
+5. Run uss_qualifier explicitly specifying a configuration to use: `monitoring/uss_qualifier/run_locally.sh configurations.dev.all_local_tests`
 
 After building, uss_qualifier should take a few minutes to run and then `report.json` should appear in [monitoring/uss_qualifier](.)
 
