@@ -1,0 +1,20 @@
+{
+  "test_run_information": {
+    "test_run_id": "e9014fa417e355bfb8cedca8d92f4b8a4c02b85b49c23b462dd78cc8f3a72f13",
+    "start_time": "2025-10-10 19:35:48 UTC",
+    "end_time": "2025-10-10 19:36:54 UTC",
+    "baseline": "c9ac88fec9708f067587c46c0820ccb09897730410b04f530a75a3dee9b32dc9",
+    "environment": "4fc6d92db64a56c8be6bf5d85c63c9ec508c5d768509209ec56ba065afb04d35"
+  },
+  "participant_verifications": {
+    "uss1": {
+      "status": "Incomplete",
+      "system_version": "BenjaminPelletier/monitoring/v0.0.0-4a99fb4"
+    },
+    "uss2": {
+      "status": "Incomplete",
+      "system_version": "BenjaminPelletier/monitoring/v0.0.0-4a99fb4"
+    }
+  },
+  "artifact_configuration": "scd"
+}
