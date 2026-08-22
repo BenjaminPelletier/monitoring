@@ -17,6 +17,17 @@
           "$ref": "FixedLocationSpecification.json"
         }
       ]
+    },
+    "uniform_random_location": {
+      "description": "Choose a flight location uniformly at random within an area.",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "UniformRandomLocationSpecification.json"
+        }
+      ]
     }
   },
   "type": "object"
