@@ -1,16 +1,12 @@
-/* Dense/overlapping SCD flight operations applied to an existing DSS deployment after adding
- * subscriptions to cause maximum contention.
+/* Sparsely-populated/widely-separated SCD flight operations applied to an existing DSS deployment
+ * after adding subscriptions to minimize contention.
  */
 
-// === Configurable parameters ===
-local test_name = 'Single S2 cell';
-local lat_lng = [34, -118];
-local s2_level = 11;
-local lat_size = 0.00001;
-local lng_size = 0.00001;
+local test_name = 'Separated ops';
 local num_uss = 3;
 local num_nodes = 3;
-local num_subscriptions = 8;
+local num_sites = 116;
+local site_separation_km = 10;
 local users_per_step = 3;
 
 local artifacts = import '../artifacts.libsonnet';
@@ -31,17 +27,17 @@ local local_resources = import './local_resources.libsonnet';
     },
   ] + [
     {
-      name: 'Create subscription %d' % sub_index,
+      name: 'Create subscription for site %d' % site_index,
       f3548: {
         create_subscription: {
           subscription: {
-            subscription_id: '3bdb0b88-a522-4286-9499-%d60e56c953bb' % (sub_index - 1),
+            subscription_id: '48ff9727-d204-4cc3-9b7a-%03d0b863f925' % (site_index - 1),
             duration: '23h',
             area: {
-              lat_min: 34 - 0.00001,
-              lng_min: -118.001 - 0.00001,
-              lat_max: 34.001 + 0.00001,
-              lng_max: -118 + 0.00001,
+              lat_min: 34 - 0.001,
+              lng_min: -118.001 - 0.001,
+              lat_max: 34.001 + 0.001,
+              lng_max: -118 + 0.001,
             },
             min_alt: {value: 0, units: 'M', reference: 'W84'},
             max_alt: {value: 3000, units: 'M', reference: 'W84'},
@@ -52,10 +48,10 @@ local local_resources = import './local_resources.libsonnet';
     } for sub_index in std.range(1, num_subscriptions)
   ] + [
     {
-      name: 'Delete subscription %d' % sub_index,
+      name: 'Delete subscription for site %d' % site_index,
       f3548: {
         delete_subscription: {
-          subscription_id: '3bdb0b88-a522-4286-9499-%d60e56c953bb' % (sub_index - 1),
+          subscription_id: '48ff9727-d204-4cc3-9b7a-%03d0b863f925' % (site_index - 1),
           mode: 'GetDeleteIfExist',
         },
       },
@@ -64,7 +60,7 @@ local local_resources = import './local_resources.libsonnet';
 
   user_types: [
     {
-      name: 'FPU%d' % uss, // Flight planner user using DSS instance from uss
+      name: 'FPU%d_s%d' % [uss, site_index] // Flight planner user using DSS instance from uss at particular site
       flight_planner: {
         flight_generation: {
           independent_time_location_shape: {
@@ -74,7 +70,7 @@ local local_resources = import './local_resources.libsonnet';
             },
             location: {
               random_location: {
-                uniform_box: {lat_min: 34, lat_max: 34.001, lng_max: -118, lng_min: -118.001},
+                uniform_box: {lat_min: 34 - 0.0001, lat_max: 34 + 0.0001, lng_min: -118 - 0.0001, lng_max: -118 + 0.0001},
                 vertical: {value: 300, reference: 'W84', units: 'M'},
               },
             },
