@@ -82,7 +82,7 @@ class SubscriptionInteractions(TestScenario):
         self._planning_area = planning_area
 
         self._secondary_instances = [
-            dss.get_instance(scopes) for dss in other_instances.dss_instances
+            dss.get_instance(scopes) for dss in other_instances.instances
         ]
 
         # Prepare the background subscription id

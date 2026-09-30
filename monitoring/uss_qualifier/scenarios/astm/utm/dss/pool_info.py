@@ -10,4 +10,4 @@ class PoolInfo(CommonPoolInfo, TestScenario):
         self,
         dss_instances: DSSInstancesResource,
     ):
-        super().__init__(dss_instances.dss_instances)
+        super().__init__(dss_instances.instances)

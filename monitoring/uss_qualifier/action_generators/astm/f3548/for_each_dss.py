@@ -65,7 +65,7 @@ class ForEachDSS(ActionGenerator[ForEachDSSSpecification]):
             raise ValueError(
                 f"Expected resource ID {specification.dss_instances_source} to be a {fullname(DSSInstancesResource)} but it was a {fullname(dss_instances_resource.__class__)} instead"
             )
-        dss_instances = dss_instances_resource.dss_instances
+        dss_instances = dss_instances_resource.instances
 
         self._actions = []
         for dss_instance in dss_instances:

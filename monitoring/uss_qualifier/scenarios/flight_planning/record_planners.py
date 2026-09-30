@@ -17,7 +17,7 @@ class RecordPlanners(TestScenario):
             "Available flight planners",
             "\n".join(
                 f"* {fp.participant_id}: {fp.client.get_base_url()}"
-                for fp in self._flight_planners.flight_planners
+                for fp in self._flight_planners.instances
             ),
         )
 

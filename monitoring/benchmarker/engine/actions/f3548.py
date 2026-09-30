@@ -36,7 +36,7 @@ def get_dss_instances(resource_pool: dict[ResourceID, Any]) -> list[DSSInstance]
         if isinstance(res, DSSInstanceResource):
             dss_instances.append(res.get_instance(scopes_required))
         elif isinstance(res, DSSInstancesResource):
-            for dss_instance_res in res.dss_instances:
+            for dss_instance_res in res.instances:
                 dss_instances.append(dss_instance_res.get_instance(scopes_required))
     return dss_instances
 

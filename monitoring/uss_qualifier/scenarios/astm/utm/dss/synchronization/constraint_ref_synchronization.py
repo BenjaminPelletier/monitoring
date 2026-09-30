@@ -97,7 +97,7 @@ class CRSynchronization(TestScenario):
 
         self._secondary_dss_instances = [
             sec_dss.get_instance(scopes_secondaries)
-            for sec_dss in other_instances.dss_instances
+            for sec_dss in other_instances.instances
         ]
 
         self._cr_id = id_generator.id_factory.make_id(self.CR_TYPE)

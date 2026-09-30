@@ -57,7 +57,7 @@ class PrepareFlightPlannersScenario(TestScenario):
                 )
             self.areas.append(v4c.bounding_volume)
         self.flight_planners = {
-            fp.participant_id: fp.client for fp in flight_planners.flight_planners
+            fp.participant_id: fp.client for fp in flight_planners.instances
         }
         if mock_uss is not None:
             self.flight_planners.update(

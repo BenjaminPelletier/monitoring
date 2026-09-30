@@ -92,7 +92,7 @@ class OIRSynchronization(TestScenario):
 
         self._dss_read_instances = [
             sec_dss.get_instance(scopes_read)
-            for sec_dss in other_instances.dss_instances
+            for sec_dss in other_instances.instances
         ]
 
         self._oir_id = id_generator.id_factory.make_id(self.SUB_TYPE)

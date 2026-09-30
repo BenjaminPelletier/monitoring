@@ -34,7 +34,7 @@ class AggregateChecks(TestScenario):
         # collect and classify queries by participant, only participants part of flight_planners are considered
         self._attributed_queries = {
             flight_planner.participant_id: dict()
-            for flight_planner in self.flight_planners.flight_planners
+            for flight_planner in self.flight_planners.instances
         }
         for query in self._queries:
             if not query.has_field_with_value(

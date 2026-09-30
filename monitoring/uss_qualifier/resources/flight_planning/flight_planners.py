@@ -13,6 +13,7 @@ from monitoring.uss_qualifier.resources.definitions import ResourceID
 from monitoring.uss_qualifier.resources.flight_planning.flight_planner import (
     FlightPlannerConfiguration,
 )
+from monitoring.uss_qualifier.resources.plural_resource import PluralResource
 from monitoring.uss_qualifier.resources.resource import Resource
 
 
@@ -61,33 +62,8 @@ class FlightPlannerResource(Resource[FlightPlannerSpecification]):
         self.participant_id = specification.flight_planner.participant_id
 
 
-class FlightPlannersSpecification(ImplicitDict):
-    flight_planners: list[FlightPlannerConfiguration]
-
-
-class FlightPlannersResource(Resource[FlightPlannersSpecification]):
-    flight_planners: list[FlightPlannerResource]
-
-    def __init__(
-        self,
-        specification: FlightPlannersSpecification,
-        resource_origin: str,
-        auth_adapter: AuthAdapterResource,
-    ):
-        super().__init__(specification, resource_origin)
-        self._specification = specification
-        self._auth_adapter = auth_adapter
-        self.flight_planners = [
-            FlightPlannerResource(
-                FlightPlannerSpecification(flight_planner=p),
-                f"instance {i + 1} in {resource_origin}",
-                auth_adapter,
-            )
-            for i, p in enumerate(specification.flight_planners)
-        ]
-
-    def make_subset(self, select_indices: Iterable[int]) -> list[FlightPlannerResource]:
-        return [self.flight_planners[i] for i in select_indices]
+class FlightPlannersResource(PluralResource[FlightPlannerResource, FlightPlannerSpecification]):
+    pass
 
 
 class FlightPlannerCombinationSelectorSpecification(ImplicitDict):

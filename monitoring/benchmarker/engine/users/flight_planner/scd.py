@@ -93,7 +93,7 @@ class SCDHandler(CoordinationSubscriber):
                 )
             res = resource_pool[res_id]
             if isinstance(res, DSSInstancesResource):
-                for dss_instance_res in res.dss_instances:
+                for dss_instance_res in res.instances:
                     self.dss_instances.append(
                         dss_instance_res.get_instance(scopes_required)
                     )

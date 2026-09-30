@@ -53,6 +53,7 @@ from monitoring.monitorlib.mutate import scd as mutate
 from monitoring.monitorlib.mutate.scd import MutatedSubscription
 from monitoring.uss_qualifier.resources.astm.dss import NotificationIndexImplementation
 from monitoring.uss_qualifier.resources.communications import AuthAdapterResource
+from monitoring.uss_qualifier.resources.plural_resource import PluralResource
 from monitoring.uss_qualifier.resources.resource import Resource
 
 
@@ -813,25 +814,5 @@ class DSSInstanceResource(Resource[DSSInstanceSpecification]):
         )
 
 
-class DSSInstancesSpecification(ImplicitDict):
-    dss_instances: list[DSSInstanceSpecification]
-
-
-class DSSInstancesResource(Resource[DSSInstancesSpecification]):
-    dss_instances: list[DSSInstanceResource]
-
-    def __init__(
-        self,
-        specification: DSSInstancesSpecification,
-        resource_origin: str,
-        auth_adapter: AuthAdapterResource,
-    ):
-        super().__init__(specification, resource_origin)
-        self.dss_instances = [
-            DSSInstanceResource(
-                specification=s,
-                resource_origin=f"instance {i + 1} in {resource_origin}",
-                auth_adapter=auth_adapter,
-            )
-            for i, s in enumerate(specification.dss_instances)
-        ]
+class DSSInstancesResource(PluralResource[DSSInstanceResource, DSSInstanceSpecification]):
+    pass

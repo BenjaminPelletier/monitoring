@@ -59,7 +59,7 @@ class USSAvailabilitySynchronization(TestScenario):
 
         self._dss_read_instances = [
             sec_dss.get_instance(scopes_read)
-            for sec_dss in other_instances.dss_instances
+            for sec_dss in other_instances.instances
         ]
 
         self._uss_id = client_identity.subject()

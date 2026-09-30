@@ -72,7 +72,7 @@ class FlightPlannerCombinations(
             raise ValueError(
                 f"Expected resource ID {specification.flight_planners_source} to be a {fullname(FlightPlannersResource)} but it was a {fullname(flight_planners_resource.__class__)} instead"
             )
-        flight_planners = flight_planners_resource.flight_planners
+        flight_planners = flight_planners_resource.instances
 
         if (
             specification.combination_selector_source is not None

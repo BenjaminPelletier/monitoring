@@ -40,7 +40,7 @@ class DSSInteroperability(TestScenario):
         self._dss_primary = primary_dss_instance.get_instance(scopes)
         self._dss_others = [
             dss.get_instance(scopes)
-            for dss in all_dss_instances.dss_instances
+            for dss in all_dss_instances.instances
             if not dss.is_same_as(primary_dss_instance)
         ]
 
