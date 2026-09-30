@@ -187,15 +187,29 @@ def get_resource_types(
 
     constructor_signature = get_type_hints(resource_type.__init__)
 
+    def _resolve_type(t, mapping: dict):
+        if isinstance(t, TypeVar):
+            return mapping.get(t, t)
+        origin = get_origin(t)
+        if origin is not None:
+            resolved_args = tuple(_resolve_type(a, mapping) for a in get_args(t))
+            if not any(isinstance(a, TypeVar) for a in resolved_args):
+                return origin[
+                    resolved_args[0] if len(resolved_args) == 1 else resolved_args
+                ]
+        return t
+
     # Resolve generic type vars, walking up the inheritance chain
     def _collect(cls: type, mapping: dict) -> None:
         for base in getattr(cls, "__orig_bases__", ()):
             origin = get_origin(base)
             if origin is None:
+                if isinstance(base, type):
+                    _collect(base, mapping)
                 continue
             params = getattr(origin, "__parameters__", ())
             for param, arg in zip(params, get_args(base)):
-                resolved = mapping.get(arg, arg)
+                resolved = _resolve_type(arg, mapping)
                 if not isinstance(resolved, TypeVar):
                     mapping[param] = resolved
             _collect(origin, mapping)
@@ -203,8 +217,18 @@ def get_resource_types(
     typevar_map: dict = {}
     _collect(resource_type, typevar_map)
     constructor_signature = {
-        name: typevar_map.get(t, t) for name, t in constructor_signature.items()
+        name: _resolve_type(t, typevar_map) for name, t in constructor_signature.items()
     }
+    get_singular_resource_type = getattr(
+        resource_type, "get_singular_resource_type", None
+    )
+    if get_singular_resource_type is not None:
+        singular_resource_type = get_singular_resource_type()
+        singular_typevar_map: dict = {}
+        _collect(singular_resource_type, singular_typevar_map)
+        for name, t in get_type_hints(singular_resource_type.__init__).items():
+            if name not in constructor_signature:
+                constructor_signature[name] = _resolve_type(t, singular_typevar_map)
 
     specification_type = None
     for arg_name, arg_type in constructor_signature.items():

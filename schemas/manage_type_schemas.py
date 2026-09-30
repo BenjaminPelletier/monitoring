@@ -93,12 +93,27 @@ def _resolve_resource_spec_type(cls: type) -> type:
     """Find the spec type bound to Resource[Spec] for a Resource subclass,
     resolving TypeVars through intermediate generic bases (e.g., ResourceModifier)."""
 
+    def resolve_arg(a, subst: dict):
+        if a in subst:
+            return subst[a]
+        arg_origin = get_origin(a)
+        if arg_origin is not None:
+            resolved_subargs = tuple(resolve_arg(sa, subst) for sa in get_args(a))
+            return arg_origin[
+                resolved_subargs[0] if len(resolved_subargs) == 1 else resolved_subargs
+            ]
+        return a
+
     def walk(c: type, subst: dict):
         for base in getattr(c, "__orig_bases__", ()):
             origin = get_origin(base)
             if origin is None:
+                if isinstance(base, type):
+                    result = walk(base, subst)
+                    if result is not None:
+                        return result
                 continue
-            args = tuple(subst.get(a, a) for a in get_args(base))
+            args = tuple(resolve_arg(a, subst) for a in get_args(base))
             if origin is Resource:
                 return args[0]
             params = getattr(origin, "__parameters__", None)

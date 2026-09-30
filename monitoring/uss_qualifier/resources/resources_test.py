@@ -8,12 +8,18 @@ from monitoring.uss_qualifier.resources.definitions import (
 )
 from monitoring.uss_qualifier.resources.dev.test_modifier import (
     NumberGeneratorModifierSpecification,
+    NumberGeneratorModifiersResource,
     NumberGeneratorSpecification,
+    NumberGeneratorsResource,
+)
+from monitoring.uss_qualifier.resources.plural_resource import (
+    PluralResourceSpecification,
 )
 from monitoring.uss_qualifier.resources.resource import (
     SupportedKeysNotSpecifiedError,
     create_resources,
 )
+from monitoring.uss_qualifier.validation import validate_resource_declarations
 
 
 class TestModifierResource(unittest.TestCase):
@@ -141,3 +147,73 @@ class TestModifierResource(unittest.TestCase):
             70,
             71,
         ]
+
+
+class TestPluralResource(unittest.TestCase):
+    def test_plural_resource(self):
+        declarations: dict[ResourceID, ResourceDeclaration] = {
+            "generators": ResourceDeclaration(
+                resource_type="resources.dev.NumberGeneratorsResource",
+                specification=PluralResourceSpecification[NumberGeneratorSpecification](
+                    instances=[
+                        NumberGeneratorSpecification(base_id=10),
+                        NumberGeneratorSpecification(base_id=20),
+                        NumberGeneratorSpecification(base_id=30),
+                    ]
+                ),
+            )
+        }
+        resources = create_resources(declarations, "unittest", True)
+        assert "generators" in resources
+        plural = resources["generators"]
+        assert isinstance(plural, NumberGeneratorsResource)
+        assert len(plural.instances) == 3
+        assert plural.instances[0].build_ids()[0] == 10
+        assert plural.instances[1].build_ids()[0] == 20
+        assert plural.instances[2].build_ids()[0] == 30
+        subset = plural.make_subset([2, 0])
+        assert [r.build_ids()[0] for r in subset] == [30, 10]
+
+    def test_plural_resource_with_dependencies_and_validation(self):
+        raw_config = {
+            "declarations": {
+                "base": {
+                    "resource_type": "resources.dev.NumberGeneratorResource",
+                    "specification": {"base_id": 100},
+                },
+                "modifiers": {
+                    "resource_type": "resources.dev.NumberGeneratorModifiersResource",
+                    "specification": {
+                        "instances": [
+                            {"shift_interval": 5},
+                            {"shift_interval": 15},
+                        ]
+                    },
+                    "dependencies": {"base_resource": "base"},
+                },
+            }
+        }
+        assert validate_resource_declarations(raw_config, "$.declarations") == []
+
+        declarations = {
+            k: ResourceDeclaration(**v) for k, v in raw_config["declarations"].items()
+        }
+        resources = create_resources(declarations, "unittest", True)
+        plural = resources["modifiers"]
+        assert isinstance(plural, NumberGeneratorModifiersResource)
+        assert len(plural.instances) == 2
+        assert plural.instances[0].provide_resource_for(index=1).build_ids()[0] == 105
+        assert plural.instances[1].provide_resource_for(index=1).build_ids()[0] == 115
+
+        # Missing dependency should fail validation
+        bad_dep_config = {
+            "declarations": {
+                "modifiers": {
+                    "resource_type": "resources.dev.NumberGeneratorModifiersResource",
+                    "specification": {"instances": [{"shift_interval": 5}]},
+                }
+            }
+        }
+        assert (
+            len(validate_resource_declarations(bad_dep_config, "$.declarations")) == 1
+        )

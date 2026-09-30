@@ -5,6 +5,7 @@ from monitoring.uss_qualifier.resources.geospatial import (
     GeospatialResource,
     TriangularCascadeSoutheastResource,
 )
+from monitoring.uss_qualifier.resources.plural_resource import PluralResource
 from monitoring.uss_qualifier.resources.resource import (
     Resource,
     ResourceProvidingResource,
@@ -31,6 +32,12 @@ class NumberGeneratorResource(Resource[NumberGeneratorSpecification]):
 
     def build_ids(self) -> list[int]:
         return list(range(self._spec.base_id, self._spec.base_id + 10))
+
+
+class NumberGeneratorsResource(
+    PluralResource[NumberGeneratorResource, NumberGeneratorSpecification]
+):
+    pass
 
 
 class NumberGeneratorModifierSpecification(ImplicitDict):
@@ -75,6 +82,14 @@ class NumberGeneratorModifierResource(
             ),
             resource_origin=self._modified_resource_origin(index),
         )
+
+
+class NumberGeneratorModifiersResource(
+    PluralResource[
+        NumberGeneratorModifierResource, NumberGeneratorModifierSpecification
+    ]
+):
+    pass
 
 
 class TestSquareSpecification(ImplicitDict):
