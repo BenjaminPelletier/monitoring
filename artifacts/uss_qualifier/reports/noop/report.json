@@ -1,0 +1,172 @@
+{
+  "codebase_version": "0.0.0+d158d40",
+  "commit_hash": "d158d40730682d7ffd0096530e7d3d08e392ef13",
+  "baseline_signature": "014ab8be999c19918bff5f9c19b725bb89bc6a90cff7a2be937f4a66d018bfad",
+  "environment_signature": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "configuration": {
+    "v1": {
+      "test_run": {
+        "resources": {
+          "resource_declarations": {
+            "noop_config": {
+              "resource_type": "resources.dev.NoOpResource",
+              "specification": {
+                "sleep_secs": 5
+              },
+              "dependencies": {}
+            }
+          }
+        },
+        "action": {
+          "test_suite": {
+            "suite_definition": {
+              "name": "No-op",
+              "resources": {
+                "noop_config": "resources.dev.NoOpResource"
+              },
+              "actions": [
+                {
+                  "test_scenario": {
+                    "scenario_type": "scenarios.dev.NoOp",
+                    "resources": {
+                      "noop_config": "noop_config"
+                    }
+                  },
+                  "on_failure": "Continue"
+                }
+              ]
+            },
+            "resources": {
+              "noop_config": "noop_config"
+            }
+          },
+          "on_failure": "Continue"
+        },
+        "non_baseline_inputs": null
+      },
+      "artifacts": {
+        "raw_report": {
+          "indent": 2,
+          "redact_access_tokens": true
+        },
+        "sequence_view": {
+          "render_kml": true,
+          "redact_access_tokens": true
+        },
+        "report_html": {
+          "redact_access_tokens": true
+        },
+        "timing_report": {
+          "percentage_of_time_to_break_down": 100.0
+        },
+        "ai_helpers": null,
+        "globally_expanded_report": null,
+        "tested_requirements": null,
+        "templated_reports": null
+      },
+      "validation": {
+        "criteria": [
+          {
+            "applicability": {
+              "test_scenarios": {}
+            },
+            "pass_condition": {
+              "each_element": {
+                "has_execution_error": false
+              }
+            }
+          },
+          {
+            "applicability": {
+              "failed_checks": {
+                "has_severity": {
+                  "higher_than": "Low"
+                }
+              }
+            },
+            "pass_condition": {
+              "elements": {
+                "count": {
+                  "equal_to": 0.0
+                }
+              }
+            }
+          },
+          {
+            "applicability": {
+              "skipped_actions": {}
+            },
+            "pass_condition": {
+              "elements": {
+                "count": {
+                  "equal_to": 0.0
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "report": {
+    "test_suite": {
+      "name": "No-op",
+      "suite_type": "<in-configuration definition>",
+      "documentation_url": "",
+      "start_time": "2026-10-03T16:10:28.140796Z",
+      "actions": [
+        {
+          "test_scenario": {
+            "name": "NoOp",
+            "scenario_type": "scenarios.dev.NoOp",
+            "documentation_url": "https://github.com/interuss/monitoring/blob/d158d40730682d7ffd0096530e7d3d08e392ef13/monitoring/uss_qualifier/scenarios/dev/noop.md",
+            "resource_origins": {
+              "noop_config": "noop_config in top-level resource pool"
+            },
+            "start_time": "2026-10-03T16:10:28.141335Z",
+            "cases": [
+              {
+                "name": "Sleep",
+                "documentation_url": "https://github.com/interuss/monitoring/blob/d158d40730682d7ffd0096530e7d3d08e392ef13/monitoring/uss_qualifier/scenarios/dev/noop.md#sleep-test-case",
+                "start_time": "2026-10-03T16:10:28.141852Z",
+                "steps": [
+                  {
+                    "name": "Sleep",
+                    "documentation_url": "https://github.com/interuss/monitoring/blob/d158d40730682d7ffd0096530e7d3d08e392ef13/monitoring/uss_qualifier/scenarios/dev/noop.md#sleep-test-step",
+                    "start_time": "2026-10-03T16:10:28.142019Z",
+                    "failed_checks": [],
+                    "passed_checks": [],
+                    "delays": [
+                      {
+                        "start_time": "2026-10-03T16:10:28.142477Z",
+                        "duration": "5s",
+                        "reason": "the no-op scenario sleeps for the specified time"
+                      }
+                    ],
+                    "end_time": "2026-10-03T16:10:33.143065Z"
+                  }
+                ],
+                "end_time": "2026-10-03T16:10:33.143097Z"
+              }
+            ],
+            "successful": true,
+            "notes": {
+              "Start time": {
+                "message": "Starting at 2026-10-03T16:10:28.142256+00:00Z, sleeping for 5s...",
+                "timestamp": "2026-10-03T16:10:28.142269Z"
+              },
+              "End time": {
+                "message": "Ending at 2026-10-03T16:10:33.142749+00:00Z.",
+                "timestamp": "2026-10-03T16:10:33.142839Z"
+              }
+            },
+            "end_time": "2026-10-03T16:10:33.143135Z"
+          }
+        }
+      ],
+      "capability_evaluations": [],
+      "successful": true,
+      "end_time": "2026-10-03T16:10:33.143830Z"
+    }
+  }
+}
